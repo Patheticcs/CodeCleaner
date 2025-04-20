@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Cleaner Pro</title>
+  <link href="https:
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --success: #4cc9f0;
+      --dark: #1d3557;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --lighter-gray: #e9ecef;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background-color: #f0f2f5;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo i {
+      font-size: 24px;
+    }
+    
+    .logo h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .theme-toggle:hover {
+      transform: rotate(30deg);
+    }
+    
+    main {
+      margin-top: 30px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    
+    .editor-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .editor-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .editor-card {
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+    }
+    
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .editor-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .editor-controls {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .textarea-wrapper {
+      position: relative;
+      flex-grow: 1;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 100%;
+      padding: 15px;
+      border: 1px solid var(--lighter-gray);
+      border-radius: var(--border-radius);
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: none;
+      transition: var(--transition);
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
+    }
+    
+    .line-numbers {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding: 15px 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--gray);
+      text-align: right;
+      width: 30px;
+      user-select: none;
+      background-color: #f8f9fa;
+      border-right: 1px solid #eee;
+      overflow: hidden;
+    }
+    
+    .textarea-numbered {
+      padding-left: 40px;
+    }
+    
+    .options-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .option-group {
+      margin-bottom: 15px;
+    }
+    
+    .option-group h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    
+    .toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .toggle-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    
+    .toggle-option input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+    
+    .toggle-option input[type="checkbox"]:checked {
+      background-color: var(--primary);
+    }
+    
+    .toggle-option input[type="checkbox"]:checked::after {
+      content: "✓";
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+    }
+    
+    .toggle-option label {
+      cursor: pointer;
+      font-size: 15px;
+    }
+    
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+    
+    button:hover {
+      background-color: var(--secondary);
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+    
+    .btn-icon {
+      padding: 8px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn-transparent {
+      background-color: transparent;
+      color: var(--gray);
+    }
+    
+    .btn-transparent:hover {
+      background-color: var(--lighter-gray);
+      color: var(--dark);
+    }
+    
+    .process-btn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 16px;
+    }
+    
+    .stats-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 15px;
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .stat-card i {
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .stat-label {
+      color: var(--gray);
+      font-size: 14px;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: var(--gray);
+      font-size: 14px;
+    }
+    
+    
+    body.dark-mode {
+      background-color: #121212;
+      color: var(--light);
+    }
+    
+    body.dark-mode header {
+      background-color: #1e1e1e;
+    }
+    
+    body.dark-mode .card,
+    body.dark-mode .options-card,
+    body.dark-mode .stat-card {
+      background-color: #1e1e1e;
+      color: var(--light);
+    }
+    
+    body.dark-mode textarea {
+      background-color: #2d2d2d;
+      color: var(--light);
+      border-color: #444;
+    }
+    
+    body.dark-mode .line-numbers {
+      background-color: #222;
+      color: #aaa;
+      border-color: #444;
+    }
+    
+    body.dark-mode .toggle-option input[type="checkbox"] {
+      border-color: var(--success);
+    }
+    
+    body.dark-mode .toggle-option input[type="checkbox"]:checked {
+      background-color: var(--success);
+    }
+    
+    body.dark-mode button {
+      background-color: var(--success);
+    }
+    
+    body.dark-mode button:hover {
+      background-color: #3da5d9;
+    }
+    
+    body.dark-mode .btn-transparent {
+      background-color: transparent;
+      color: #aaa;
+    }
+    
+    body.dark-mode .btn-transparent:hover {
+      background-color: #333;
+      color: white;
+    }
+    
+    body.dark-mode .stat-card i {
+      color: var(--success);
+    }
+    
+    body.dark-mode .editor-title,
+    body.dark-mode .stat-value {
+      color: var(--light);
+    }
+    
+    body.dark-mode .option-group h3 {
+      color: var(--light);
+    }
+    
+    
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      z-index: 1;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+    
+    body.dark-mode .dropdown-content {
+      background-color: #333;
+    }
+    
+    .dropdown-content a {
+      color: var(--dark);
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: background-color 0.2s;
+    }
+    
+    body.dark-mode .dropdown-content a {
+      color: var(--light);
+    }
+    
+    .dropdown-content a:hover {
+      background-color: var(--lighter-gray);
+    }
+    
+    body.dark-mode .dropdown-content a:hover {
+      background-color: #444;
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast i {
+      font-size: 18px;
+    }
+    
+    
+    .language-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .language-btn {
+      background-color: var(--lighter-gray);
+      color: var(--dark);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .language-btn.active {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    body.dark-mode .language-btn {
+      background-color: #2d2d2d;
+      color: var(--light);
+    }
+    
+    body.dark-mode .language-btn.active {
+      background-color: var(--success);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <i class="fas fa-code"></i>
+        <h1>Code Cleaner Pro</h1>
+      </div>
+      <button class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <main>
+      <div class="options-card">
+        <div class="options-grid">
+          <div class="option-group">
+            <h3>Comment Removal</h3>
+            <div class="toggle-group">
+              <div class="toggle-option">
+                <input type="checkbox" id="js" checked>
+                <label for="js">JavaScript</label>
+              </div>
+              <div class="toggle-option">
+                <input type="checkbox" id="lua" checked>
+                <label for="lua">Lua</label>
+              </div>
+              <div class="toggle-option">
+                <input type="checkbox" id="c" checked>
+                <label for="c">C/C++</label>
+              </div>
+              <div class="toggle-option">
+                <input type="checkbox" id="python" checked>
+                <label for="python">Python</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-group">
+            <h3>Formatting</h3>
+            <div class="toggle-group">
+              <div class="toggle-option">
+                <input type="checkbox" id="beautify" checked>
+                <label for="beautify">Beautify</label>
+              </div>
+              <div class="toggle-option">
+                <input type="checkbox" id="trim-empty">
+                <label for="trim-empty">Remove Empty Lines</label>
+              </div>
+              <div class="toggle-option">
+                <input type="checkbox" id="minify">
+                <label for="minify">Minify</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-group">
+            <h3>Indentation</h3>
+            <div class="toggle-group">
+              <div class="toggle-option">
+                <input type="radio" name="indent" id="spaces-2" checked>
+                <label for="spaces-2">2 Spaces</label>
+              </div>
+              <div class="toggle-option">
+                <input type="radio" name="indent" id="spaces-4">
+                <label for="spaces-4">4 Spaces</label>
+              </div>
+              <div class="toggle-option">
+                <input type="radio" name="indent" id="tab">
+                <label for="tab">Tab</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-group">
+            <h3>Extra Options</h3>
+            <div class="toggle-group">
+              <div class="toggle-option">
+                <input type="checkbox" id="preserve-docblocks">
+                <label for="preserve-docblocks">Preserve DocBlocks</label>
+              </div>
+              <div class="toggle-option">
+                <input type="checkbox" id="line-break-unix" checked>
+                <label for="line-break-unix">Unix Line Breaks</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="process-btn" onclick="processCode()">
+          <i class="fas fa-magic"></i> Process Code
+        </button>
+      </div>
+      
+      <div class="editor-section">
+        <div class="card editor-card">
+          <div class="editor-header">
+            <div class="editor-title">
+              <i class="fas fa-code"></i> Input Code
+            </div>
+            <div class="editor-controls">
+              <button class="btn-sm btn-transparent" id="paste-btn" title="Paste from clipboard">
+                <i class="fas fa-paste"></i>
+              </button>
+              <button class="btn-sm btn-transparent" id="clear-input" title="Clear input">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <div class="dropdown">
+                <button class="btn-sm btn-transparent" title="More options">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-content">
+                  <a href="#" id="load-sample">Load Sample Code</a>
+                  <a href="#" id="upload-file">Upload File</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="textarea-wrapper">
+            <div class="line-numbers" id="input-line-numbers"></div>
+            <textarea id="input" class="textarea-numbered" placeholder="Paste your code here or load a sample..."></textarea>
+          </div>
+        </div>
+        
+        <div class="card editor-card">
+          <div class="editor-header">
+            <div class="editor-title">
+              <i class="fas fa-check-circle"></i> Output Code
+            </div>
+            <div class="editor-controls">
+              <button class="btn-sm btn-transparent" id="copy-btn" title="Copy to clipboard">
+                <i class="fas fa-copy"></i>
+              </button>
+              <button class="btn-sm btn-transparent" id="download-btn" title="Download as file">
+                <i class="fas fa-download"></i>
+              </button>
+              <div class="dropdown">
+                <button class="btn-sm btn-transparent" title="More options">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-content">
+                  <a href="#" id="use-as-input">Use as Input</a>
+                  <a href="#" id="share-output">Share Result</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="textarea-wrapper">
+            <div class="line-numbers" id="output-line-numbers"></div>
+            <textarea id="output" class="textarea-numbered" placeholder="Output will appear here..." readonly></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stats-container">
+        <div class="stat-card">
+          <i class="fas fa-comment-slash"></i>
+          <div class="stat-value" id="comments-removed">0</div>
+          <div class="stat-label">Comments Removed</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-compress-alt"></i>
+          <div class="stat-value" id="size-reduction">0%</div>
+          <div class="stat-label">Size Reduction</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-align-left"></i>
+          <div class="stat-value" id="line-count">0</div>
+          <div class="stat-label">Line Count</div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-clock"></i>
+          <div class="stat-value" id="process-time">0ms</div>
+          <div class="stat-label">Process Time</div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <p>Code Cleaner Pro &copy; 2025 | Clean, format, and optimize your code with ease</p>
+    </footer>
+  </div>
+  
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Operation completed successfully!</span>
+  </div>
+  
+  <script>
+    
+    const inputTextarea = document.getElementById('input');
+    const outputTextarea = document.getElementById('output');
+    const themeToggle = document.getElementById('theme-toggle');
+    const inputLineNumbers = document.getElementById('input-line-numbers');
+    const outputLineNumbers = document.getElementById('output-line-numbers');
+    const pasteBtn = document.getElementById('paste-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const clearInputBtn = document.getElementById('clear-input');
+    const downloadBtn = document.getElementById('download-btn');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    const loadSampleBtn = document.getElementById('load-sample');
+    const useAsInputBtn = document.getElementById('use-as-input');
+    
+    
+    const commentsRemovedEl = document.getElementById('comments-removed');
+    const sizeReductionEl = document.getElementById('size-reduction');
+    const lineCountEl = document.getElementById('line-count');
+    const processTimeEl = document.getElementById('process-time');
+    
+    
+    const jsCheckbox = document.getElementById('js');
+    const luaCheckbox = document.getElementById('lua');
+    const cCheckbox = document.getElementById('c');
+    const pythonCheckbox = document.getElementById('python');
+    const beautifyCheckbox = document.getElementById('beautify');
+    const trimEmptyCheckbox = document.getElementById('trim-empty');
+    const minifyCheckbox = document.getElementById('minify');
+    const preserveDocblocksCheckbox = document.getElementById('preserve-docblocks');
+    
+    
+    function updateLineNumbers(textarea, lineNumbersDiv) {
+      const lines = textarea.value.split('\n');
+      const lineCount = lines.length;
+      let lineNumbersHTML = '';
+      
+      for (let i = 1; i <= lineCount; i++) {
+        lineNumbersHTML += i + '<br>';
+      }
+      
+      lineNumbersDiv.innerHTML = lineNumbersHTML;
+    }
+    
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const icon = themeToggle.querySelector('i');
+      
+      if (document.body.classList.contains('dark-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+    
+    
+    function loadTheme() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.querySelector('i').classList.remove('fa-moon');
+        themeToggle.querySelector('i').classList.add('fa-sun');
+      }
+    }
+    
+    
+    function loadToggleStates() {
+      const checkboxes = [
+        'js', 'lua', 'c', 'python',
+        'beautify', 'trim-empty', 'minify',
+        'preserve-docblocks', 'line-break-unix'
+      ];
+      
+      checkboxes.forEach(id => {
+        const value = localStorage.getItem(id);
+        if (value !== null) {
+          document.getElementById(id).checked = value === 'true';
+        }
+      });
+      
+      
+      const indent = localStorage.getItem('indent');
+      if (indent) {
+        document.getElementById(indent).checked = true;
+      }
+    }
+    
+    
+    function saveToggleStates() {
+      const checkboxes = [
+        'js', 'lua', 'c', 'python',
+        'beautify', 'trim-empty', 'minify',
+        'preserve-docblocks', 'line-break-unix'
+      ];
+      
+      checkboxes.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).checked);
+      });
+      
+      
+      if (document.getElementById('spaces-2').checked) {
+        localStorage.setItem('indent', 'spaces-2');
+      } else if (document.getElementById('spaces-4').checked) {
+        localStorage.setItem('indent', 'spaces-4');
+      } else {
+        localStorage.setItem('indent', 'tab');
+      }
+    }
+    
+    
+    function showToast(message) {
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    
+    function removeLuaComments(code) {
+      const preserveDocblocks = preserveDocblocksCheckbox.checked;
+      let commentCount = 0;
+      
+      
+      let docblocks = [];
+      if (preserveDocblocks) {
+        const docblockRegex = /--\[\[[\s\S]*?@[\s\S]*?\]\]/g;
+        let match;
+        while ((match = docblockRegex.exec(code)) !== null) {
+          docblocks.push({
+            content: match[0],
+            index: match.index
+          });
+        }
+      }
+      
+      
+      const blockComments = code.match(/--\[\[[\s\S]*?\]\]/g) || [];
+      commentCount += blockComments.length;
+      
+      
+      const lineComments = code.match(/--.*(?=\n|$)/g) || [];
+      commentCount += lineComments.length;
+      
+      
+      code = code.replace(/--\[\[[\s\S]*?\]\]/g, "").replace(/--.*(?=\n|$)/g, "");
+      
+      
+      if (preserveDocblocks && docblocks.length > 0) {
+        
+        let codeArray = code.split('');
+        
+        
+        for (let i = docblocks.length - 1; i >= 0; i--) {
+          codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
+          commentCount -= 1; 
+        }
+        
+        code = codeArray.join('');
+      }
+      
+      return { code, commentCount };
+    }
+    
+    function removeJsComments(code) {
+      const preserveDocblocks = preserveDocblocksCheckbox.checked;
+      let commentCount = 0;
+      
+      
+      let docblocks = [];
+      if (preserveDocblocks) {
+        const docblockRegex = /\/\*\*[\s\S]*?@[\s\S]*?\*\
+        let match;
+        while ((match = docblockRegex.exec(code)) !== null) {
+          docblocks.push({
+            content: match[0],
+            index: match.index
+          });
+        }
+      }
+      
+      
+      const blockComments = code.match(/\/\*[\s\S]*?\*\
+      commentCount += blockComments.length;
+      
+      
+      const lineComments = code.match(/\/\/.*(?=\n|$)/g) || [];
+      commentCount += lineComments.length;
+      
+      
+      code = code.replace(/\/\*[\s\S]*?\*\
+      
+      
+      if (preserveDocblocks && docblocks.length > 0) {
+        
+        let codeArray = code.split('');
+        
+        
+        for (let i = docblocks.length - 1; i >= 0; i--) {
+          codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
+          commentCount -= 1; 
+        }
+        
+        code = codeArray.join('');
+      }
+      
+      return { code, commentCount };
+    }
+    
+    function removeCComments(code) {
+      const preserveDocblocks = preserveDocblocksCheckbox.checked;
+      let commentCount = 0;
+      
+      
+      let docblocks = [];
+      if (preserveDocblocks) {
+        const docblockRegex = /\/\*\*[\s\S]*?@[\s\S]*?\*\
+        let match;
+        while ((match = docblockRegex.exec(code)) !== null) {
+          docblocks.push({
+            content: match[0],
+index: match.index
+          });
+        }
+      }
+      
+      
+      const blockComments = code.match(/\/\*[\s\S]*?\*\
+      commentCount += blockComments.length;
+      
+      
+      const lineComments = code.match(/\/\/.*(?=\n|$)/g) || [];
+      commentCount += lineComments.length;
+      
+      
+      code = code.replace(/\/\*[\s\S]*?\*\
+      
+      
+      if (preserveDocblocks && docblocks.length > 0) {
+        
+        let codeArray = code.split('');
+        
+        
+        for (let i = docblocks.length - 1; i >= 0; i--) {
+          codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
+          commentCount -= 1; 
+        }
+        
+        code = codeArray.join('');
+      }
+      
+      return { code, commentCount };
+    }
+    
+    function removePythonComments(code) {
+      const preserveDocblocks = preserveDocblocksCheckbox.checked;
+      let commentCount = 0;
+      
+      
+      let docblocks = [];
+      if (preserveDocblocks) {
+        const docblockRegex = /"""[\s\S]*?@[\s\S]*?"""/g;
+        let match;
+        while ((match = docblockRegex.exec(code)) !== null) {
+          docblocks.push({
+            content: match[0],
+            index: match.index
+          });
+        }
+      }
+      
+      
+      const tripleComments = code.match(/"""[\s\S]*?"""/g) || [];
+      commentCount += tripleComments.length;
+      
+      
+      const singleTripleComments = code.match(/'''[\s\S]*?'''/g) || [];
+      commentCount += singleTripleComments.length;
+      
+      
+      const lineComments = code.match(/#.*(?=\n|$)/g) || [];
+      commentCount += lineComments.length;
+      
+      
+      code = code.replace(/"""[\s\S]*?"""/g, "")
+               .replace(/'''[\s\S]*?'''/g, "")
+               .replace(/#.*(?=\n|$)/g, "");
+      
+      
+      if (preserveDocblocks && docblocks.length > 0) {
+        
+        let codeArray = code.split('');
+        
+        
+        for (let i = docblocks.length - 1; i >= 0; i--) {
+          codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
+          commentCount -= 1; 
+        }
+        
+        code = codeArray.join('');
+      }
+      
+      return { code, commentCount };
+    }
+    
+    
+    function beautifyCode(code) {
+      if (minifyCheckbox.checked) {
+        
+        code = code.replace(/\s+/g, ' ')
+                   .replace(/\{ /g, '{')
+                   .replace(/ \}/g, '}')
+                   .replace(/\[ /g, '[')
+                   .replace(/ \]/g, ']')
+                   .replace(/\( /g, '(')
+                   .replace(/ \)/g, ')')
+                   .replace(/ = /g, '=')
+                   .replace(/ \+ /g, '+')
+                   .replace(/ - /g, '-')
+                   .replace(/ \* /g, '*')
+                   .replace(/ \/ /g, '/')
+                   .replace(/; /g, ';')
+                   .replace(/, /g, ',')
+                   .replace(/: /g, ':')
+                   .trim();
+        return code;
+      }
+      
+      if (!beautifyCheckbox.checked) {
+        return code;
+      }
+      
+      
+      let indentChar = '  '; 
+      if (document.getElementById('spaces-4').checked) {
+        indentChar = '    '; 
+      } else if (document.getElementById('tab').checked) {
+        indentChar = '\t'; 
+      }
+      
+      
+      let lines = code.split('\n');
+      let result = [];
+      let currentIndent = 0;
+      let inString = false;
+      let stringChar = '';
+      
+      
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        
+        
+        if (trimEmptyCheckbox.checked && line === '') {
+          continue;
+        }
+        
+        
+        if (line.includes('{') && !line.includes('}')) {
+          result.push(indentChar.repeat(currentIndent) + line);
+          currentIndent++;
+        } else if (line.includes('}') && !line.includes('{')) {
+          currentIndent = Math.max(0, currentIndent - 1);
+          result.push(indentChar.repeat(currentIndent) + line);
+        } else {
+          result.push(indentChar.repeat(currentIndent) + line);
+        }
+      }
+      
+      return result.join('\n');
+    }
+    
+    
+    function processCode() {
+      const startTime = performance.now();
+      const inputCode = inputTextarea.value;
+      const originalSize = inputCode.length;
+      let processedCode = inputCode;
+      let totalCommentsRemoved = 0;
+      
+      
+      if (jsCheckbox.checked) {
+        const { code, commentCount } = removeJsComments(processedCode);
+        processedCode = code;
+        totalCommentsRemoved += commentCount;
+      }
+      
+      if (luaCheckbox.checked) {
+        const { code, commentCount } = removeLuaComments(processedCode);
+        processedCode = code;
+        totalCommentsRemoved += commentCount;
+      }
+      
+      if (cCheckbox.checked) {
+        const { code, commentCount } = removeCComments(processedCode);
+        processedCode = code;
+        totalCommentsRemoved += commentCount;
+      }
+      
+      if (pythonCheckbox.checked) {
+        const { code, commentCount } = removePythonComments(processedCode);
+        processedCode = code;
+        totalCommentsRemoved += commentCount;
+      }
+      
+      
+      processedCode = beautifyCode(processedCode);
+      
+      
+      if (document.getElementById('line-break-unix').checked) {
+        processedCode = processedCode.replace(/\r\n/g, '\n');
+      }
+      
+      
+      outputTextarea.value = processedCode;
+      
+      
+      const endTime = performance.now();
+      const processTime = Math.round(endTime - startTime);
+      const newSize = processedCode.length;
+      const sizeReduction = originalSize > 0 ? Math.round((1 - newSize / originalSize) * 100) : 0;
+      const lineCount = processedCode.split('\n').length;
+      
+      
+      commentsRemovedEl.textContent = totalCommentsRemoved;
+      sizeReductionEl.textContent = sizeReduction + '%';
+      lineCountEl.textContent = lineCount;
+      processTimeEl.textContent = processTime + 'ms';
+      
+      
+      updateLineNumbers(outputTextarea, outputLineNumbers);
+      
+      
+      saveToggleStates();
+      
+      
+      showToast('Code processed successfully!');
+    }
+    
+    
+    inputTextarea.addEventListener('input', () => {
+      updateLineNumbers(inputTextarea, inputLineNumbers);
+    });
+    
+    outputTextarea.addEventListener('input', () => {
+      updateLineNumbers(outputTextarea, outputLineNumbers);
+    });
+    
+    pasteBtn.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        inputTextarea.value = text;
+        updateLineNumbers(inputTextarea, inputLineNumbers);
+        showToast('Code pasted from clipboard');
+      } catch (err) {
+        showToast('Failed to read clipboard: ' + err);
+      }
+    });
+    
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(outputTextarea.value);
+        showToast('Code copied to clipboard');
+      } catch (err) {
+        showToast('Failed to copy: ' + err);
+      }
+    });
+    
+    clearInputBtn.addEventListener('click', () => {
+      inputTextarea.value = '';
+      updateLineNumbers(inputTextarea, inputLineNumbers);
+      showToast('Input cleared');
+    });
+    
+    downloadBtn.addEventListener('click', () => {
+      const code = outputTextarea.value;
+      if (!code) {
+        showToast('No code to download');
+        return;
+      }
+      
+      
+      const blob = new Blob([code], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cleaned_code.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast('Code downloaded');
+    });
+    
+    loadSampleBtn.addEventListener('click', () => {
+      
+      const sampleCode = `
+
+
+function calculateSum(a, b) {
+  
+  return a + b; 
+}
+
+
+function multiply(x, y) {
+  return x * y;
+}
+
+-- Lua comment
+--[[
+  Multi-line Lua comment
+  with nested levels
+]]
+
+function factorial(n)
+  -- Calculate factorial recursively
+  if n <= 1 then
+    return 1 -- Base case
+  else
+    return n * factorial(n - 1)
+  end
+end
+
+--[[
+  @function fibonacci
+  @param n Index of the Fibonacci sequence
+  @return The nth Fibonacci number
+]]
+function fibonacci(n)
+  if n <= 1 then return n end
+  return fibonacci(n-1) + fibonacci(n-2)
+end
+
+# Python comment
+'''
+Multi-line Python comment
+with nested levels
+'''
+
+def greet(name):
+    # Greet a person
+    return "Hello, " + name + "!" # Return greeting
+
+"""
+@function calculate_average
+@param numbers List of numbers
+@return The average of the numbers
+"""
+def calculate_average(numbers):
+    return sum(numbers) / len(numbers)
+`;
+      
+      inputTextarea.value = sampleCode;
+      updateLineNumbers(inputTextarea, inputLineNumbers);
+      showToast('Sample code loaded');
+    });
+    
+    useAsInputBtn.addEventListener('click', () => {
+      const outputCode = outputTextarea.value;
+      if (!outputCode) {
+        showToast('No output to use as input');
+        return;
+      }
+      
+      inputTextarea.value = outputCode;
+      updateLineNumbers(inputTextarea, inputLineNumbers);
+      showToast('Output used as new input');
+    });
+    
+    document.getElementById('upload-file').addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.js,.lua,.py,.c,.cpp,.h,.html,.css,.txt';
+      
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          inputTextarea.value = e.target.result;
+          updateLineNumbers(inputTextarea, inputLineNumbers);
+          showToast(`File "${file.name}" loaded`);
+        };
+        reader.readAsText(file);
+      };
+      
+      input.click();
+    });
+    
+    document.getElementById('share-output').addEventListener('click', () => {
+      const code = outputTextarea.value;
+      if (!code) {
+        showToast('No output to share');
+        return;
+      }
+      
+      
+      
+      showToast('Sharing feature would go here (demo)');
+    });
+    
+    
+    minifyCheckbox.addEventListener('change', () => {
+      if (minifyCheckbox.checked) {
+        beautifyCheckbox.checked = false;
+        trimEmptyCheckbox.checked = true;
+      }
+    });
+    
+    beautifyCheckbox.addEventListener('change', () => {
+      if (beautifyCheckbox.checked) {
+        minifyCheckbox.checked = false;
+      }
+    });
+    
+    
+    window.addEventListener('load', () => {
+      loadTheme();
+      loadToggleStates();
+      updateLineNumbers(inputTextarea, inputLineNumbers);
+      updateLineNumbers(outputTextarea, outputLineNumbers);
+    });
+  </script>
+</body>
+</html>

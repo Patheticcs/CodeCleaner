@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Code Cleaner Pro</title>
-  <link href="https:
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
       --primary: #4361ee;
@@ -213,7 +213,7 @@
       gap: 8px;
     }
     
-    
+    /* Custom checkbox */
     .toggle-option input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
@@ -344,7 +344,7 @@
       font-size: 14px;
     }
     
-    
+    /* Dark mode */
     body.dark-mode {
       background-color: #121212;
       color: var(--light);
@@ -412,7 +412,7 @@
       color: var(--light);
     }
     
-    
+    /* Dropdown styling */
     .dropdown {
       position: relative;
       display: inline-block;
@@ -457,7 +457,7 @@
       display: block;
     }
     
-    
+    /* Toast notification */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -485,7 +485,7 @@
       font-size: 18px;
     }
     
-    
+    /* Code language switcher */
     .language-selector {
       display: flex;
       gap: 10px;
@@ -709,7 +709,7 @@
   </div>
   
   <script>
-    
+    // DOM Elements
     const inputTextarea = document.getElementById('input');
     const outputTextarea = document.getElementById('output');
     const themeToggle = document.getElementById('theme-toggle');
@@ -724,13 +724,13 @@
     const loadSampleBtn = document.getElementById('load-sample');
     const useAsInputBtn = document.getElementById('use-as-input');
     
-    
+    // Stats Elements
     const commentsRemovedEl = document.getElementById('comments-removed');
     const sizeReductionEl = document.getElementById('size-reduction');
     const lineCountEl = document.getElementById('line-count');
     const processTimeEl = document.getElementById('process-time');
     
-    
+    // Checkbox Elements
     const jsCheckbox = document.getElementById('js');
     const luaCheckbox = document.getElementById('lua');
     const cCheckbox = document.getElementById('c');
@@ -740,7 +740,7 @@
     const minifyCheckbox = document.getElementById('minify');
     const preserveDocblocksCheckbox = document.getElementById('preserve-docblocks');
     
-    
+    // Initialize line numbers
     function updateLineNumbers(textarea, lineNumbersDiv) {
       const lines = textarea.value.split('\n');
       const lineCount = lines.length;
@@ -753,7 +753,7 @@
       lineNumbersDiv.innerHTML = lineNumbersHTML;
     }
     
-    
+    // Toggle dark mode
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       const icon = themeToggle.querySelector('i');
@@ -769,7 +769,7 @@
       }
     });
     
-    
+    // Load theme from localStorage
     function loadTheme() {
       const theme = localStorage.getItem('theme');
       if (theme === 'dark') {
@@ -779,7 +779,7 @@
       }
     }
     
-    
+    // Load saved checkbox states
     function loadToggleStates() {
       const checkboxes = [
         'js', 'lua', 'c', 'python',
@@ -794,14 +794,14 @@
         }
       });
       
-      
+      // Load indent preference
       const indent = localStorage.getItem('indent');
       if (indent) {
         document.getElementById(indent).checked = true;
       }
     }
     
-    
+    // Save checkbox states
     function saveToggleStates() {
       const checkboxes = [
         'js', 'lua', 'c', 'python',
@@ -813,7 +813,7 @@
         localStorage.setItem(id, document.getElementById(id).checked);
       });
       
-      
+      // Save indent preference
       if (document.getElementById('spaces-2').checked) {
         localStorage.setItem('indent', 'spaces-2');
       } else if (document.getElementById('spaces-4').checked) {
@@ -823,7 +823,7 @@
       }
     }
     
-    
+    // Show toast notification
     function showToast(message) {
       toastMessage.textContent = message;
       toast.classList.add('show');
@@ -833,12 +833,12 @@
       }, 3000);
     }
     
-    
+    // Comment removal functions
     function removeLuaComments(code) {
       const preserveDocblocks = preserveDocblocksCheckbox.checked;
       let commentCount = 0;
       
-      
+      // Store docblocks if preserving them
       let docblocks = [];
       if (preserveDocblocks) {
         const docblockRegex = /--\[\[[\s\S]*?@[\s\S]*?\]\]/g;
@@ -851,26 +851,26 @@
         }
       }
       
-      
+      // Count and remove block comments
       const blockComments = code.match(/--\[\[[\s\S]*?\]\]/g) || [];
       commentCount += blockComments.length;
       
-      
+      // Count and remove line comments
       const lineComments = code.match(/--.*(?=\n|$)/g) || [];
       commentCount += lineComments.length;
       
-      
+      // Remove all comments
       code = code.replace(/--\[\[[\s\S]*?\]\]/g, "").replace(/--.*(?=\n|$)/g, "");
       
-      
+      // Re-insert docblocks if preserving them
       if (preserveDocblocks && docblocks.length > 0) {
-        
+        // Convert code to array for easier manipulation
         let codeArray = code.split('');
         
-        
+        // Insert docblocks back, starting from the end to avoid index issues
         for (let i = docblocks.length - 1; i >= 0; i--) {
           codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
-          commentCount -= 1; 
+          commentCount -= 1; // Adjust comment count
         }
         
         code = codeArray.join('');
@@ -883,10 +883,10 @@
       const preserveDocblocks = preserveDocblocksCheckbox.checked;
       let commentCount = 0;
       
-      
+      // Store docblocks if preserving them
       let docblocks = [];
       if (preserveDocblocks) {
-        const docblockRegex = /\/\*\*[\s\S]*?@[\s\S]*?\*\
+        const docblockRegex = /\/\*\*[\s\S]*?@[\s\S]*?\*\//g;
         let match;
         while ((match = docblockRegex.exec(code)) !== null) {
           docblocks.push({
@@ -896,26 +896,26 @@
         }
       }
       
-      
-      const blockComments = code.match(/\/\*[\s\S]*?\*\
+      // Count and remove block comments
+      const blockComments = code.match(/\/\*[\s\S]*?\*\//g) || [];
       commentCount += blockComments.length;
       
-      
+      // Count and remove line comments
       const lineComments = code.match(/\/\/.*(?=\n|$)/g) || [];
       commentCount += lineComments.length;
       
+      // Remove all comments
+      code = code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*(?=\n|$)/g, "");
       
-      code = code.replace(/\/\*[\s\S]*?\*\
-      
-      
+      // Re-insert docblocks if preserving them
       if (preserveDocblocks && docblocks.length > 0) {
-        
+        // Convert code to array for easier manipulation
         let codeArray = code.split('');
         
-        
+        // Insert docblocks back, starting from the end to avoid index issues
         for (let i = docblocks.length - 1; i >= 0; i--) {
           codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
-          commentCount -= 1; 
+          commentCount -= 1; // Adjust comment count
         }
         
         code = codeArray.join('');
@@ -928,10 +928,10 @@
       const preserveDocblocks = preserveDocblocksCheckbox.checked;
       let commentCount = 0;
       
-      
+      // Store docblocks if preserving them
       let docblocks = [];
       if (preserveDocblocks) {
-        const docblockRegex = /\/\*\*[\s\S]*?@[\s\S]*?\*\
+        const docblockRegex = /\/\*\*[\s\S]*?@[\s\S]*?\*\//g;
         let match;
         while ((match = docblockRegex.exec(code)) !== null) {
           docblocks.push({
@@ -941,26 +941,26 @@ index: match.index
         }
       }
       
-      
-      const blockComments = code.match(/\/\*[\s\S]*?\*\
+      // Count and remove block comments
+      const blockComments = code.match(/\/\*[\s\S]*?\*\//g) || [];
       commentCount += blockComments.length;
       
-      
+      // Count and remove line comments
       const lineComments = code.match(/\/\/.*(?=\n|$)/g) || [];
       commentCount += lineComments.length;
       
+      // Remove all comments
+      code = code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*(?=\n|$)/g, "");
       
-      code = code.replace(/\/\*[\s\S]*?\*\
-      
-      
+      // Re-insert docblocks if preserving them
       if (preserveDocblocks && docblocks.length > 0) {
-        
+        // Convert code to array for easier manipulation
         let codeArray = code.split('');
         
-        
+        // Insert docblocks back, starting from the end to avoid index issues
         for (let i = docblocks.length - 1; i >= 0; i--) {
           codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
-          commentCount -= 1; 
+          commentCount -= 1; // Adjust comment count
         }
         
         code = codeArray.join('');
@@ -973,7 +973,7 @@ index: match.index
       const preserveDocblocks = preserveDocblocksCheckbox.checked;
       let commentCount = 0;
       
-      
+      // Store docblocks if preserving them
       let docblocks = [];
       if (preserveDocblocks) {
         const docblockRegex = /"""[\s\S]*?@[\s\S]*?"""/g;
@@ -986,32 +986,32 @@ index: match.index
         }
       }
       
-      
+      // Count and remove triple-quote comments
       const tripleComments = code.match(/"""[\s\S]*?"""/g) || [];
       commentCount += tripleComments.length;
       
-      
+      // Count and remove single-quote triple comments
       const singleTripleComments = code.match(/'''[\s\S]*?'''/g) || [];
       commentCount += singleTripleComments.length;
       
-      
+      // Count and remove line comments
       const lineComments = code.match(/#.*(?=\n|$)/g) || [];
       commentCount += lineComments.length;
       
-      
+      // Remove all comments
       code = code.replace(/"""[\s\S]*?"""/g, "")
                .replace(/'''[\s\S]*?'''/g, "")
                .replace(/#.*(?=\n|$)/g, "");
       
-      
+      // Re-insert docblocks if preserving them
       if (preserveDocblocks && docblocks.length > 0) {
-        
+        // Convert code to array for easier manipulation
         let codeArray = code.split('');
         
-        
+        // Insert docblocks back, starting from the end to avoid index issues
         for (let i = docblocks.length - 1; i >= 0; i--) {
           codeArray.splice(docblocks[i].index, 0, docblocks[i].content);
-          commentCount -= 1; 
+          commentCount -= 1; // Adjust comment count
         }
         
         code = codeArray.join('');
@@ -1020,10 +1020,10 @@ index: match.index
       return { code, commentCount };
     }
     
-    
+    // Beautify code function
     function beautifyCode(code) {
       if (minifyCheckbox.checked) {
-        
+        // Minify: remove all whitespace where possible
         code = code.replace(/\s+/g, ' ')
                    .replace(/\{ /g, '{')
                    .replace(/ \}/g, '}')
@@ -1047,31 +1047,31 @@ index: match.index
         return code;
       }
       
-      
-      let indentChar = '  '; 
+      // Determine indentation type
+      let indentChar = '  '; // Default 2 spaces
       if (document.getElementById('spaces-4').checked) {
-        indentChar = '    '; 
+        indentChar = '    '; // 4 spaces
       } else if (document.getElementById('tab').checked) {
-        indentChar = '\t'; 
+        indentChar = '\t'; // Tab
       }
       
-      
+      // Split into lines and process each line
       let lines = code.split('\n');
       let result = [];
       let currentIndent = 0;
       let inString = false;
       let stringChar = '';
       
-      
+      // Process each line
       for (let i = 0; i < lines.length; i++) {
         let line = lines[i].trim();
         
-        
+        // Skip empty lines if trim-empty is checked
         if (trimEmptyCheckbox.checked && line === '') {
           continue;
         }
         
-        
+        // Simple beautification logic
         if (line.includes('{') && !line.includes('}')) {
           result.push(indentChar.repeat(currentIndent) + line);
           currentIndent++;
@@ -1086,7 +1086,7 @@ index: match.index
       return result.join('\n');
     }
     
-    
+    // Process code
     function processCode() {
       const startTime = performance.now();
       const inputCode = inputTextarea.value;
@@ -1094,7 +1094,7 @@ index: match.index
       let processedCode = inputCode;
       let totalCommentsRemoved = 0;
       
-      
+      // Process comments based on selected languages
       if (jsCheckbox.checked) {
         const { code, commentCount } = removeJsComments(processedCode);
         processedCode = code;
@@ -1119,41 +1119,41 @@ index: match.index
         totalCommentsRemoved += commentCount;
       }
       
-      
+      // Apply beautification if selected
       processedCode = beautifyCode(processedCode);
       
-      
+      // Ensure Unix line breaks if selected
       if (document.getElementById('line-break-unix').checked) {
         processedCode = processedCode.replace(/\r\n/g, '\n');
       }
       
-      
+      // Update the output textarea
       outputTextarea.value = processedCode;
       
-      
+      // Calculate statistics
       const endTime = performance.now();
       const processTime = Math.round(endTime - startTime);
       const newSize = processedCode.length;
       const sizeReduction = originalSize > 0 ? Math.round((1 - newSize / originalSize) * 100) : 0;
       const lineCount = processedCode.split('\n').length;
       
-      
+      // Update stats display
       commentsRemovedEl.textContent = totalCommentsRemoved;
       sizeReductionEl.textContent = sizeReduction + '%';
       lineCountEl.textContent = lineCount;
       processTimeEl.textContent = processTime + 'ms';
       
-      
+      // Update line numbers for output
       updateLineNumbers(outputTextarea, outputLineNumbers);
       
-      
+      // Save user preferences
       saveToggleStates();
       
-      
+      // Show success toast
       showToast('Code processed successfully!');
     }
     
-    
+    // Event Listeners
     inputTextarea.addEventListener('input', () => {
       updateLineNumbers(inputTextarea, inputLineNumbers);
     });
@@ -1195,7 +1195,7 @@ index: match.index
         return;
       }
       
-      
+      // Create a blob and download link
       const blob = new Blob([code], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1210,16 +1210,24 @@ index: match.index
     });
     
     loadSampleBtn.addEventListener('click', () => {
-      
-      const sampleCode = `
-
+      // Sample code with mixed comments
+      const sampleCode = `// JavaScript Comment Example
+/* 
+ * Multi-line JavaScript comment
+ * with nested levels
+ */
 
 function calculateSum(a, b) {
-  
-  return a + b; 
+  // Add two numbers
+  return a + b; // Return the sum
 }
 
-
+/**
+ * @function multiply
+ * @param {number} x - First number
+ * @param {number} y - Second number
+ * @returns {number} Product of x and y
+ */
 function multiply(x, y) {
   return x * y;
 }
@@ -1313,12 +1321,12 @@ def calculate_average(numbers):
         return;
       }
       
-      
-      
+      // In a real app, this might generate a shareable link
+      // For now, just show a demo message
       showToast('Sharing feature would go here (demo)');
     });
     
-    
+    // Option toggles interactivity
     minifyCheckbox.addEventListener('change', () => {
       if (minifyCheckbox.checked) {
         beautifyCheckbox.checked = false;
@@ -1332,7 +1340,7 @@ def calculate_average(numbers):
       }
     });
     
-    
+    // Initialize on page load
     window.addEventListener('load', () => {
       loadTheme();
       loadToggleStates();
